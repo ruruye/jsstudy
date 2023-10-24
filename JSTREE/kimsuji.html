@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>수지 Tree</title>
+<!-- css 포함 -->    
+<link rel="stylesheet" href="//static.jstree.com/3.3.15/assets/bootstrap/css/bootstrap.min.css" /> 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.15/themes/default/style.min.css"/>
+<!-- jQuery와 pugin으로 만들어졌으니 jquery 필수 포함 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<!-- jstree lib 포함 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.15/jstree.min.js"></script>
+</head>
+<body>
+    <!--이것이 딱 기본!, 추가적인 검색과 문서읽기 능력을 키워서 -->
+    <!--jsTree를 넣을 위치를 잡아 줌!-->
+    <div id="sujiTree"></div>
+    <input type="text" id="schText" value="">
+    <button onclick="fSch()">찾아볼까</button>
+<script>
+
+    // 찾기!
+    function fSch(){
+        // true가 있으면 만들어진 걸 가져오고, 없으면 새로 만든다고 되어있는데, 
+        // 설명이 조금 부족!
+        $('#sujiTree').jstree(true).search($("#schText").val());
+    }
+
+    console.log("찍어보자1", $.jstree.defaults.core.themes.variant);
+    // 디폴트값 강제 설정법!, 리스트는 나중에 찾기로
+    $.jstree.defaults.core.themes.variant = "large";
+    console.log("찍어보자2", $.jstree.defaults.core.themes.variant);
+    
+    // AJAX 사용! (이게 중요!)
+    /* 보통은 이걸로 충분! */
+    $('#sujiTree').jstree({
+        "plugins" : [ "search" ],   // search시 search 플러그인 추가
+        'core' : {
+            'data' : {
+                'url' : function (node) {
+                            return "alldata.json";
+                        }
+            },
+            check_callback: true  // 주의!! 요거이 없으면, create_node 안먹음
+        }    
+    }); 
+   
+    /* 위에 꺼는 URL과 보내는 data만 쓸 수 있어서, 세세한 제어가 
+       불가능한데, 그런 경우 아래처럼 직접 ajax를 넣어서 제어한다!
+    
+    $('#sujiTree').jstree({
+    'core' : {
+        'data' : function (obj, cb) {
+                let xhr = new XMLHttpRequest();
+                xhr.open("get","alldata.json",true);
+                xhr.onreadystatechange = function(){
+                    if(xhr.readyState == 4 && xhr.status == 200){
+                        cb.call(this, JSON.parse(xhr.responseText));
+                    }
+                }
+                // Loading 메세지가 계속 나오는 건 보통 data가 없는 경우
+                xhr.send();
+        }
+    }});
+    */
+
+    /* 이벤트 등록법
+    $('#sujiTree').on("changed.jstree", function (e, data) {
+        //console.log("체킁:",data); node에 필요한 정보가 없는 경우에 사용
+        console.log("실제로 많이 쓰는 건 node 정보:",data.node);
+        console.log("실제로 많이 쓰는 건 node 정보:",data.node.original.handsome);
+    });
+    */
+
+    // node open이벤트 (이벤트명은 문서에서 검색해서 복사 붙여넣기)
+
+    // 상태변수, 이런 걸 초보자들이 잘 못해요!
+    let isAdded = false;    // 초기값 false, 아직 추가 안 됐다는 의미!
+
+    $('#sujiTree').on("open_node.jstree", function (e, data) {
+        console.log("열린노드:", data.node);
+        
+        if(!isAdded && data.node.id == 'S4'){
+         alert("왔냐?");
+            // child node 강제로 만들기
+         $("#sujiTree").jstree(true).create_node("S4" , 
+            {"text":"대전 스타일","id":"S42"}, 
+             'last', function() {
+                        alert("추가 되었을 거예요");
+             }
+         );
+         isAdded = true;    // 추가 되었음!
+        }
+    });
+
+    /* 아래 3개는 같은 동작
+    $('#jstree').jstree(true).select_node('child_node_1');
+    $('#jstree').jstree('select_node', 'child_node_1');
+    $.jstree.reference('#jstree').select_node('child_node_1');
+    */
+</script>
+</body>
+</html>

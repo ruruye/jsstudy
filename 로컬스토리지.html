@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+ <script>
+//브라우져 내에도 저장공간이 있음!(Cookie)
+//요즘은 쿠키에 질려서 localStorage를 더많이 사용함
+//f12 ->application -> localStorage
+
+localStorage.myname="윤강혁";
+localStorage.myage="100";
+
+localStorage.setItem("name","정수지");
+localStorage.setItem("name","김수지"); //덮어쓰기,update(수정)
+localStorage.setItem("color","black");
+localStorage.setItem("color","pink");   //덮어쓰기,update(수정)
+localStorage.setItem("alias","swan");
+
+//alert(localStorage.getItem("name"));
+//alert("갯수"+ localStorage.length);
+//alert("키값: "+localStorage.key(0)); //순서가 쓴대로 보장이 안되서 잘안씀(전체 뻉뻉돌릴땐 사용)
+localStorage.removeItem("alias"); //파라미터값만 제거
+localStorage.clear(); //다지우기
+ </script>

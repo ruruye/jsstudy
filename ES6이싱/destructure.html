@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<script>
+// 구조분해  Destructuring
+// 최신 자바스크립트에선 많이 사용됨!
+// 특히 프론트 프레임워크 react, angular, vue ......
+
+    let testObj = {
+        a:"서예린",
+        b:"김채현",
+        c:"이경진",
+        d:"정범진"
+    }
+
+    let jsj = [];
+
+    for(let i=1; i<=3; i++){
+        let pname = `정수지${i}`;
+        alert("...jsj" + [...jsj]);
+        jsj = [...jsj, pname];  // 이따구로 표현이 아주 많이 사용됨! (미친듯이)
+    }
+
+    alert("체킁:" + jsj);
+
+
+    /*
+    let testArr = ["임석일","이미지","김수지","임민우"];
+
+    // let [,...[,,merong]] = testArr;
+    let [,...ot] = testArr;
+
+    alert(ot[1]);  // 누구게?
+    */
+
+    //let kj = testObj.c;     // 보통 이렇게 쓰는데 
+
+    /*
+    let {c:a,a:c} = testObj;   // 처음 볼 땐 이게 뭐야 할 수 있음! 쓰다보면 편해짐!
+
+    alert(c);   // 여기에 예린
+    alert(a);   // 여기에 경진
+    */
+
+    //alert(kj);
+    //alert(c);   // 이건 안 됨
+
+</script>

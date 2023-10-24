@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<body>
+    <div class="huk bbb">이경진</div>
+    <div class="huk aaa">서예린</div>
+    <div class="huk aaa">임민우</div>
+    <div class="huk bbb">윤강혁</div>
+    <input type="text" value="김채현" ><br>
+    <input type="text" value="이경진"><br>
+    <input type="text" value="서예린"><br>
+    <input type="text" value="신진수"><br>
+</body>
+<script>
+// jQuery 간략버전으로 만들어 보아요 $("선택자")
+// function은 class 키워드의 의미로 사용되고 있음
+// new가 너무나 꼴보기 싫어, 가끔 빼먹는 실수도 하고
+//var $;
+
+(function(){
+    const $ = function(pSel){
+        return new MyDom(pSel);
+    }
+
+    const MyDom = function(pSel){
+        let elems = document.querySelectorAll(pSel); // 선택자에 해당하는 거 가져오기
+        // 검색된 걸 자신의 속성으로 옮겨(정확히는 참조) 담음
+        this.length = elems.length;
+        for(let i=0; i<this.length; i++){
+            this[i] = elems[i];
+        }
+        return this;
+    }   
+    window.$=$;     // 전역변수 $와 지역변수 $를 서로 참조하게끔 (곧 같은 곳을 가리키는 별명이 되어버림)
+    // jQuery 사용자(개발자)들도 자기만의 메소드(jQuery플러그인이라 부름)
+    // 를 추가할 수 있도록(곧 확장) MyDom.prototype을 밖에서 접근할 수 있도록 해주어야 했음
+    // MyDom.prototype.메소드이름=function(){}
+    $.fn=MyDom.prototype;
+})();
+
+// jQuery 플러그인 마구 마구 만들기
+$.fn.eq = function(pIndex){
+    // 숙제!!!!
+    // pIndex에 해당하는 dom 객체만 남기고, index번호를 0번으로 만들어야 함
+    return this;
+}
+
+// innerHTML 속성을 편하게 다루는 메소드 html()
+// 오버로딩(매개변수를 시그니처로 같은 이름의 메소드를 구분하는 것)
+// 자바스크립트엔 없음
+$.fn.html = function(pArg){
+    if(!pArg){ // 매개변수값이 넘어오지 않았을 때 (읽기 - 무조건 첫번째 것)
+        return this[0].innerHTML
+    }
+
+    // 매개변수로 문자열이 넘고 너머 왔을 때!...(전부 쓰기)
+    if(typeof(pArg)=="string"){
+        for(let i=0; i<this.length; i++){
+            this[i].innerHTML = pArg;
+        }
+        return this;    // 메소드 체인닝!
+    }
+
+    // 매개변수로 콜백함수가 왔을 때 (부분쓰기, 조건부쓰기)
+    if(typeof(pArg)=="function"){
+        for(let i=0; i<this.length; i++){
+            this[i].innerHTML = pArg.call(this[i],i,this[i].innerHTML);
+        }
+        return this;    // 메소드 체인닝
+    }
+}
+
+// value 속성을 편하게 쓸 수 있도록 도와주는 val 메소드,
+$.fn.val = function(pArg){
+    if(!pArg){ // 매개변수값이 넘어오지 않았을 때 (읽기 - 무조건 첫번째 것)
+        return this[0].value
+    }
+
+    // 매개변수로 문자열이 넘고 너머 왔을 때!...(전부 쓰기)
+    if(typeof(pArg)=="string"){
+        for(let i=0; i<this.length; i++){
+            this[i].value = pArg;
+        }
+        return this;    // 메소드 체인닝!
+    }
+
+    // 매개변수로 콜백함수가 왔을 때 (부분쓰기, 조건부쓰기)
+    if(typeof(pArg)=="function"){
+        for(let i=0; i<this.length; i++){
+            this[i].value = pArg.call(this[i],i,this[i].value);
+        }
+        return this;    // 메소드 체인닝
+    }
+}
+
+//태그안의 여러가지 속성을 지정해서 값을 읽고 /변경할 수 있는 attr
+$.fn.attr = function(pArg1,pArg2){
+    if(!pArg2){ // 매개변수값이 넘어오지 않았을 때 (읽기 - 무조건 첫번째 것)
+        return this[0][pArg1]; //첫번째 해당 속성값
+    }
+
+    // 매개변수로 문자열이 넘고 너머 왔을 때!...(전부 쓰기)
+    if(typeof(pArg2)=="string"){
+        for(let i=0; i<this.length; i++){
+            this[i][pArg1] = pArg2;
+        }
+        return this;    // 메소드 체인닝!
+    }
+
+    // 매개변수로 콜백함수가 왔을 때 (부분쓰기, 조건부쓰기)
+    if(typeof(pArg2)=="function"){
+        for(let i=0; i<this.length; i++){
+            this[i][pArg1] = pArg2.call(this[i],i,this[i][pArg1]);
+        }
+        return this;    // 메소드 체인닝
+    }
+}
+
+//jQuery 이벤트 등록 메소드 on을 후다닥 만들어보기
+$.fn.on = function(pEvent, pCb){
+    for(let i=0; i<this.length; i++){
+        this[i].addEventListener(pEvent, pCb);
+    }
+    return this;    // 메소드 체인닝
+}
+
+/*
+$("div").on("click",function(){
+    console.log("체킁:",this);
+    alert("나 눌렀니?" + this.innerHTML);
+})
+*/
+
+$("div").html(function(pIndex,pVal){
+    if(pIndex == 1){
+        return "<h1>메롱</h1>";
+    }
+    return pVal;
+}).on("click",function(){
+    console.log("체킁:",this);
+    alert("나 눌렀니?" + this.innerHTML);
+})
+
+//alert($("input").attr("type")); //text
+//alert($("input").attr("value")); //김채현
+
+//$("input").attr("type","checkbox");
+/*
+$("input").attr("type",function(pIndex,pVal){
+    if(pIndex==3){
+        return "checkbox"; // 3번째 마지막꺼만 체크박스로 바뀜
+    }
+    return pVal;
+})
+*/
+
+
+
+//alert($("input[type=text]").val());
+//$("input[type=text]").val("서예린");
+/*
+$("input[type=text]").val(function(pIndex,pVal){
+    if(pIndex==1){
+        return "메에롱";
+    }
+    return pVal;  //받은대로 돌려주면 값 변화 없음
+})
+*/
+
+//let huks = new MyDom(".huk.aaa");
+//let huks = $(".huk");
+//alert($(".huk").html());
+//$(".huk").html("누가 누가 졸리나요?")
+/*
+$(".huk").html(function(pIndex,pHtml){
+    console.log("체킁:",this);
+    // alert("index:" + pIndex + "  " + "html:" + pHtml);
+    if(pIndex == 0){
+        return pHtml + " 방송계진출 짝짝짝";
+    }
+    if(pHtml.includes("예린")){
+        return `<h1>${pHtml}IT관상! 짝짝</h1>`;
+    }
+    
+    return pHtml;
+})
+*/
+
+//console.log("체킁:",huks.eq(1));
+
+</script>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>border를 두고 작업</title>
+<style>
+    div {
+        border : 1px solid blue;    /* 항상 레이아웃을 눈으로 보면서 */
+    }
+    #header {
+        height : 20vh;
+    }
+    #cont {
+        height : 70vh;
+    }
+    #footer {
+        height : 10vh;
+    }
+    .merong {
+        display : inline-block;
+        width : 20vw;
+        height : 100%; /*부모와 동일 */
+    }
+</style>
+</head>
+<body>
+    <!-- border를 표시하고 작업해야 나중에 예쁘게 정리할 수 있음 -->
+    <div id="myWrap">
+        <div id="header">
+            난 머리
+        </div>
+        <div id="cont">
+            <div class="merong">흥</div>
+            <div class="merong">칫</div>
+            <div class="merong">뿌</div>
+            <div class="merong">웅</div>
+        </div>
+        <div id="footer">
+            난 발바닥
+        </div>
+    </div>
+</body>
+</html>

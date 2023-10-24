@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script>
+        function(){
+        this.onclick=null;
+    }
+    </script>
+    <style>
+#ball {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTP-52sxa4pN2426Up5-NJ0eJ3wt_2m8apQYg&usqp=CAU");
+    background-size : 100% 100%;
+
+    transform: skewY(125deg);/* skew 뒤틀리다 */
+    /*
+    transform: rotate(70deg);
+    */
+   
+    }
+
+    </style>
+</head>
+<body>
+   
+    <button  onclick="froxy(this)">움직여</button>
+    
+    <div id="ball"></div>
+    
+    <script>
+        /* proxy(대리인/대리) 패턴(프로그램 디자인 패턴)
+        
+        */
+        var isStart=false; //시작 안된 상태 표시(이런 변수를 상태변수라 부름)
+                           //flag(깃발) 변수라고도 함
+        //알고리즘이 막혔거나, 한개 함수의 소스가 너무 길어질 때 
+        //대신 해줄 사람을 만들어볼까? 를 생각해보면 꽤 일이 쉬워지는 경우가 많음
+       function froxy(){
+        if(!isStart){    
+            fMove();
+            isStart=true; //시작된 상태 표시
+        }
+       }
+        
+        const myball=document.querySelector('#ball');
+        let mvwidth = 10; //움직이는 x축
+        let mvHeight = 5; //움직이는 y축
+        let rotGak=0; //회전각
+        const fMove=(pthis)=>{
+            console.log("체크:",pthis);
+            //치사한 방법이지만 때론 적절한 방법일 수 있음
+            // if(pthis){
+            //     pthis.disabled = true; //치사한 방법 //눌러도 소용없게
+            // }
+            if(!myball.style.left){ // 값이 설정되어 있지 않다면
+                myball.style.left = "50px";
+                myball.style["top"] = "50px";
+            }
+            
+            rotGak = rotGak + 10;
+
+            myball.style.left = parseInt(myball.style.left) + mvwidth + "px"; //오른쪽으로 이동
+            myball.style.top = parseInt(myball.style.top) + mvHeight + "px"; //오른쪽으로 이동
+            myball.style.transform = `rotate(${rotGak}deg)`;
+
+            var leftsu = parseInt(myball.style.left);
+            var topsu = parseInt(myball.style.top);
+            //오른쪽or 왼쪽 충돌 구현
+            if((leftsu +100) >= window.innerWidth || leftsu <=0){
+                mvwidth = -mvwidth; //-1 * mvwidth;
+                myball.style.transform = `rotate(${rotGak}deg) skewX(45deg)`;
+            }
+            
+            //위아래 충돌 구현
+            if((topsu +100) >= window.innerHeight || topsu <=0){
+                mvHeight = -mvHeight; //-1 * mvwidth;
+                myball.style.transform = `rotate(${rotGak}deg) skewY(45deg)`;
+            }
+           
+            setTimeout(fMove,50,pthis); //함수이름을 FP(function pointer)라 부름
+        }
+        //보이는 화면 높이/넓이 구하기
+        console.log("보이는 화면넓이",window.innerWidth);
+        console.log("보이는 화면넓이",window.innerHeight);
+
+
+    </script>
+</body>
+</html>

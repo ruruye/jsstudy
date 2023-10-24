@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+
+  
+</head>
+<body>
+    <input type="text" id="tsch" valye="">
+    <input type="button" value="이미지 찾깅" onclick="fsch()">
+    <br><br>
+    <div id="disp"></div>
+    <script>
+        function fsch() {
+            //script태그를 만들어 줘야함
+            var myScript = document.createElement('script');
+            myScript.src=preURL + vtsch.value +postURL;
+            
+            document.head.appendChild(myScript);
+        }
+
+        var preURL="https://www.flickr.com/services/feeds/photos_public.gne?tags=";
+        var postURL="&format=json"
+
+        var vtsch=document.querySelector("#tsch");
+        var vdisp=document.querySelector("#disp");
+    
+        //함수를 미리 정의 해둠
+        //왜? 호출 당할걸 알고 있으니 미리준비 
+        // 이렇게 실행시키는걸 jsonp(json padding)이라고 부르고
+        //서버쪽에서 요렇게 서비스를 해줘야만 쓸 수 있음!
+        function jsonFlickrFeed(pData) {
+            //console.log(pData);
+            var bumjins =pData.items;
+            vdisp.innerHTML="";
+            for(let i = 0; i <bumjins.length; i++) {
+                    console.log("이미지URL",bumjins[i].media.m);
+                    var vImg = document.createElement("img");// img 태그 생성!
+                    vImg.src = bumjins[i].media.m;
+                    vdisp.appendChild(vImg); //화면에 심어야 눈에 보임
+            }
+        }
+    </script>
+        <script src="https://www.flickr.com/services/feeds/photos_public.gne?tags=dog&format=json"></script>
+</body>
+</html>

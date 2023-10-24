@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <form id="vicBell" action="">
+        아이디 <input type="text" name="n_name" value="" required><br>
+        전화번호 <input type="text" name="n_tel" value="" required><br>
+        <button>전송</button>
+<!--button이 form 태그 사이에 들어가면 기본 type이 submit이 됨-->
+        <!-- <button type="submit" onclick="fAjax()">전송</button> 이것도 원하는 게 아니야 -->
+        <!-- <input type="submit" value="전송"> 위 버튼과 같은 표현 -->
+<script>
+    /*
+        submit 버튼에 onclick 이벤트 걸지 말고,
+        form태그에 onsubmit 이벤트를 걸어줘야, required, pattern 등
+        새로 나온 유효성 체크를 속성들을 편하게 같이 사용할 수 있음!
+    */
+
+    const vicBell = document.querySelector("#vicBell");
+    // form 전송 직전에 발생하는 이벤트
+    vicBell.addEventListener("submit", fAjax); 
+     function fAjax(){
+        // 여기에 아작스를 쓰면 어떻게 됨? 이상함! 페이지가 넘어가는데..
+        /*
+            type을 button으로 바꾸면 직접 유효성 체크를 해야함! 
+        */
+
+        event.preventDefault();     // built-in 기능 막기
+
+        let xhr = new XMLHttpRequest();
+        xhr.open("get","/jsstudy/AJAX/data.json",true);
+        xhr.onreadystatechange = function(){
+            if(xhr.readyState == 4 && xhr.status == 200){
+                console.log("체킁:", JSON.parse(xhr.responseText));
+            }
+        }
+        xhr.send();
+    }
+</script>
+    </form>
+</body>
+</html>

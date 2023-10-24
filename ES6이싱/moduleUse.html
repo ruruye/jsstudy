@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<script type="module">
+    import { itzy as iZ, blackPink as bP } from "./idolModule.js";  // 확장자 안 빼먹기
+    console.log("체킁:",iZ);  // itzy는 공유가 안됨! (영역이 분리)
+    window.merong = "오늘 졸린 강혁팀장 완전 메롱!";
+</script>
+
+<script type="module">
+    import { blackPink as bP } from "./idolModule.js";  // 확장자 안 빼먹기
+    console.log("체킁3:",bP);
+    console.log("체킁5:",merong);   // 이건 공유됨 (모듈끼리 전역변수 공유가능, 주의)
+    console.log("체킁4:",iZ);   // itzy는 공유가 안 됨! (모듈끼리도 공유 안 됨)
+</script>
+
+<script type="module">
+    import myK from './idolModule.js'   // 기본적으로 khuck 함수가 수입됨
+    myK("졸린 강혁");
+
+</script>
+
+
+<script>
+// module 너무 넘 중요, 앞으론 안쓰고 못배김
+    console.log("체킁2:",iZ);
+    console.log("체킁6:",merong);   // 전역이어도 공유 안 됨
+</script>

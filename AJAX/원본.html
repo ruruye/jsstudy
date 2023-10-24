@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<div id="disp"></div>
+<button onclick="fAjax()">아닥스</button>
+<button onclick="fAjax2()">아닥스2</button>
+<button onclick="fAjax3()">아닥스3</button>
+<script>
+// 매개 변수들을 한 덩어리로 보내면 훨씬 플렉서블 해짐
+
+const $={}; // 빈 객체 생성(내 맘) -> 네임스페이스용
+
+// $객체의 메소드로 ajax를 만듦, 이제부터 $.ajax라고 써야함
+// 이따구로 해서 $.ajax(jQuery)가 만들어짐 (역시 별 거 아니었음!)
+$.ajax=function(pSet){
+    let xhr = new XMLHttpRequest();
+    xhr.open(pSet.method,pSet.url,pSet.async);
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState == 4 && xhr.status == 200){
+            if(pSet.dataType == "json"){
+                pSet.success(JSON.parse(xhr.responseText));
+            }else {
+                pSet.success(xhr.responseText);
+            }
+        }
+    }
+    xhr.send();
+}
+
+// DRY (Do not Repeat Yourself)  반복하지 마라!
+function fDry(pURL,pCallback) { // 매개변수를 개수에 영향 받지 않게 더 플렉시블하게 만들 수 있음!
+    let xhr = new XMLHttpRequest();
+    xhr.open("get",pURL,true);  // 세번째 매개변수로 비동기(true)/동기(false) 구분
+    xhr.onreadystatechange = function() {
+        if(xhr.readyState == 4 && xhr.status == 200) {
+            // 가져온 결과 xhr.responseText
+            // 달라야 하는 부분
+            pCallback(xhr.responseText);
+            alert("경진예린 메롱!")
+        } 
+    }
+    xhr.send();
+    console.log("값 보이나?",xhr.responseText);  //"값이 보이나?"만 찍히고 나머진 안 찍힘
+    alert("바보 메롱!");
+}
+
+// 3개 함수가 다 똑같음!
+function fCommon(pRslt) {
+    myDisp.innerHTML = pRslt;
+}
+function fAjax(){
+    $.ajax({
+        method:"get",
+        url:"data.csv",
+        async:true,
+        success:function(rslt){
+            myDisp.innerHTML = rslt;
+
+        }
+    })
+
+    //fDry("data.csv",fCommon);
+}
+
+function fAjax2(){
+    $.ajax({
+        method:"get",
+        url:"data.html",
+        async:true,
+        success:function(rslt){
+            myDisp.innerHTML = rslt;
+
+        }
+    })    
+    //fDry("data.html",fCommon);
+}
+
+function fAjax3(){
+    $.ajax({
+        method:"get",
+        url:"data.json",
+        async:true,
+        dataType:"json",
+        success:function(rslt){
+            // CSR(Click Side Rendering) vs SSR(Server Side Rendering)
+            console.log("결과:",rslt);
+            //rlst 결과를 table(<table>)형태로 disp에 출력하시오.
+            let tblStr = "<table border=1>";
+            tblStr += "<tr><th>이름</th><th>나이</th><th>별명</th></tr>";
+            for(let i=0; i<rslt.length; i++){
+                tblStr += "<tr>";
+                tblStr += `<td>${rslt[i].name}</td>`;
+                tblStr += `<td>${rslt[i].age}</td>`;
+                tblStr += `<td>${rslt[i].alias}</td>`;
+                tblStr += "</tr>";
+            }
+            tblStr += "</table>";
+            myDisp.innerHTML = tblStr;
+            
+            //let jsonData = JSON.parse(rslt);
+            // myDisp.innerHTML = `${rslt[0].name}는${rslt[0].alias}`;
+        }
+    }) 
+
+    // fDry("data.json",function(pRslt){
+    //     let jsonData = JSON.parse(pRslt); //문자열을 json객체로 변환
+    //     myDisp.innerHTML = jsonData[2].name + "은" + jsonData[2].alias;
+    // });
+}
+
+const myDisp = document.querySelector("#disp");
+/*
+function fAjax3() {
+    let xhr = new XMLHttpRequest();
+    xhr.open("get", "data.json", true);
+    xhr.onreadystatechange = function(){
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            console.log(xhr.responseText);
+            //객체(배열,json) 문자열이라면 객체로 변환해서 쓰는 것이
+            // 편해서 정신건강에 아주 좋음
+            console.log(JSON.parse(xhr.responseText));
+        }
+    }
+    xhr.send();
+}  
+function fAjax2() {
+// 바로 테스트, 서버에서 data.html을 아작스로 가져와삼
+// disp안에 넣으시용! 제한시간 10초
+    let xhr = new XMLHttpRequest();
+    xhr.open("get", "data.html", true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            console.log("항상 결과 체킁 : ",xhr.responseText);
+            //document.querySelector("#disp").innerHTML += xhr.responseText;
+            myDisp.innerHTML += xhr.responseText;
+        }
+    }
+    xhr.send(); //실행
+}
+
+function fAjax() {
+    //지역변수로 사용한당!
+    let xhr = new XMLHttpRequest(); // 통신 심부름꾼 아저씨 생성
+    xhr.open("get", "data.csv", true); // 할일 지정
+    xhr.onreadystatechange  = function() {
+        if(xhr.readyState == 4 && xhr.status == 200) {
+            console.log("가져온 결과값 : ", xhr.responseText);
+            console.log(xhr.responseText);
+        }
+    }    
+    xhr.send();
+}
+
+
+// ajax(Asynchronouse JAavascript XML)의 중요성은 말로 다 표현할 수 없음
+// 가장 근본 모양
+
+// 전역변수? 머겅, 현실에 비유하면 심부름꿈 1명을 이지매하겠다는 이야기
+// 그래서 아작스 변수는 전역변수로 쓰지 않는당!(기본!!)
+// 결론은 항상 함수 속에 들어가 있어야 된다는 이야깅!
+let xhr = new XMLHttpRequest(); // 통신 심부름꾼 아저씨 생성
+                                // 컴터에선 맘대로 생성 가능(요금 없음)
+xhr.open("get", "data.csv", true); // 할일 지정
+// 시킨 일이 끝났는지 모니터링(이벤트기반)
+xhr.onreadystatechange  = function() {
+    // 중간과정에는 관심이 없엉!(무시, 끝났는지만 관심)
+    if(xhr.readyState == 4 && xhr.status == 200) {
+        console.log("가져온 결과값 : ", xhr.responseText);
+        console.log(xhr.responseText);
+    }
+}    
+xhr.send(); // 시킨대로 하시옹, 보통 이벤트 등록 후에 실행
+*/
+</script>

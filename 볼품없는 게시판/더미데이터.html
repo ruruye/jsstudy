@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+    <meta charset="UTF-8">
+    <script>
+        //loacalStorage 더미데이터 만들기(mongodb형태)
+        var tblName="hong"//테이블이름
+
+        var datas=[]; //빈배열
+        for(let i=1; i<=108; i++){  // 108번뇌
+            var gesiGul={}          // 빈 객체
+            gesiGul.id=i; //primary key로 사용할 것(곧 유일한 값 - 검색)
+            gesiGul.title = "타이틀"+i;
+            gesiGul.writer = "지은이"+i;
+            gesiGul.content="내용"+i;
+        /* 객체 지향DB는 요따구로 플렉시블함!
+        if(i==5){
+            gesiGul.merong="메롱";
+        }
+        if(i==6){
+            gesiGul.merong=["메","에","롱"];
+        }
+        */
+            gesiGul.date=(new Date()).toDateString();
+            datas.push(gesiGul); //배열에 담기
+        
+        }
+        //localStorage에 저장
+        localStorage.setItem(tblName, JSON.stringify(datas)); 
+    </script>

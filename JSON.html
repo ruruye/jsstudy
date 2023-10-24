@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+    <meta charset="UTF-8">
+ <script>
+    //JSON(JavaScript object notation)자바스크립트 객체 표기법
+    //JSON 모르면 안됨
+    /* 방법 1
+    var name="myname";
+    var roze={
+        name:"roze", //key값은 자동으로 문자열 처리됨(일부 꼭 "를 붙여야 하는 경우있음)
+        "age":26,
+        "song":"Gone"
+    }
+    */    
+   //배열식[] 접근법은 .접근법보다 성능은 떨어지지만 
+   //프로그램은 아주 플렉시블하게 만들어줌
+   //반드시 알아야함
+
+//    var name="범진";
+//    var age= 100;
+   
+//    var roze={
+//     [name]:"jenni",
+//     [age]:27,
+//     ["song"]:"solo"
+//    }
+   
+//    roze[300] = "흥";//변수 명명 규칙에 roze.숫자로 시작할 수 없음
+//                     //.대신 []를 붙여주면 사용가능함
+
+//    console.log("체크: ",roze);
+ //----------------------------------------------------------------------
+
+   var name="범진";
+   var age= 100;
+   
+   var roze={
+    [0]:"jenni",
+    [1]:27,
+    [1]:"solo",
+    length:3
+   }
+
+   for(let i=0;i<roze.length;i++){
+    alert(roze[i]);
+   }
+
+   
+   roze[300] = "흥";//변수 명명 규칙에 roze.숫자로 시작할 수 없음
+                    //.대신 []를 붙여주면 사용가능함
+
+   console.log("체크: ",roze);
+
+    /*
+    var rose={};
+            roze.name="rose";
+            roze.age=26;
+            roze.song="Gone";
+      */
+     
+      
+ </script>

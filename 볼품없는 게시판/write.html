@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+    <title>Document</title>
+        <style>
+            #wrapper{
+                width: 500px;
+                margin: 30px auto; /*수평가운데 정렬*/
+                border:1px solid blueviolet;
+                text-align: center;
+            }
+
+        </style>
+</head>
+<body>
+    <div id="wrapper">
+        <h1 style="text-align: center;">볼품없는 게시판</h1>
+        <hr>
+        <form action="write_action.html" method="get">
+            <table border="1" width="500">
+                <tbody>
+                    <tr>
+                        <td>제목</td>
+                        <td><input type="tel" name="title" value="" required></td>
+                    </tr>
+                    <tr>
+                        <td>지은이</td>
+                        <td><input type="text" name="writer" value="" required></td>
+                    </tr>
+                    <tr>
+                        <td>내용</td>
+                        <td><textarea rows="10" cols="40" name="content" required></textarea></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                         <!-- submit에는 onclick 걸지 않는다. 걸거면 button타입에 걸기-->
+                            <input  type="submit" value="쓰기">
+                            <input type="reset" value="다시쓰기">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+        <a href="write.html">새글 쓰기</a>
+    </div>
+</body>
+</html>
